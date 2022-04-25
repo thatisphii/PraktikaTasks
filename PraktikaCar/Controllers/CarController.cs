@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PraktikaCar.DTOs;
+using PraktikaCar.Entities;
 using PraktikaCar.Services.IServices;
 using System;
 using System.Collections.Generic;
@@ -45,15 +46,26 @@ namespace PraktikaCar.Controllers
         [HttpPut]
         public IActionResult Update(CarToUpdateDTO carToUpdateDTO)
         {
+            var car = carToUpdateDTO;
+            if (car==null)
+            {
+                return BadRequest();
+            }
             _carService.Update(carToUpdateDTO);
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{carId}")]
         public IActionResult Delete(int carId)
         {
+            var car = _carService.Get(carId);
+            
+            if (car==null)
+            {
+                return BadRequest();
+            }
             _carService.Delete(carId);
-            return Ok();
+            return NoContent();
         }
     }
 }
